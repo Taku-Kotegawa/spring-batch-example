@@ -3,7 +3,6 @@ package com.example.springbatchexample.application.batch.test001;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
@@ -25,15 +24,15 @@ public class Job001Config {
     Job job() {
 
         Step step1 = new StepBuilder("step1", jobRepository)
-                    .tasklet((contribution, chunkContext) -> {
-                        System.out.println("sample job step");
-                        return RepeatStatus.FINISHED;
-                    }, txManager)
-                    .build();
+                .tasklet((contribution, chunkContext) -> {
+                    System.out.println("sample job step");
+                    return RepeatStatus.FINISHED;
+                }, txManager)
+                .build();
 
         Step step2 = new StepBuilder("step2", jobRepository)
-                    .tasklet(testTasklet, txManager)
-                    .build();
+                .tasklet(testTasklet, txManager)
+                .build();
 
         return new JobBuilder("job001", jobRepository)
                 .incrementer(new RunIdIncrementer()) // 同じパラメーアの再実行を許可する
