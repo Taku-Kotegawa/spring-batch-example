@@ -1,36 +1,29 @@
 package com.example.springbatchexample.config;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.batch.BatchDataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
+import org.springframework.core.env.Environment;
 
 import javax.sql.DataSource;
 
 @Configuration
+@RequiredArgsConstructor
 public class BatchConfiguration {
 
-    @org.springframework.boot.autoconfigure.batch.BatchDataSource
-    @Bean("batchDS")
-    public DataSource dataSource(BatchDataSource batchDataSource) {
-        return DataSourceBuilder.create()
-                .url(batchDataSource.getUrl())
-                .driverClassName(batchDataSource.getDriverClassName())
-                .username(batchDataSource.getUsername())
-                .password(batchDataSource.getPassword())
-                .build();
-    }
+    private final Environment environment;
 
-    @Component
-    @ConfigurationProperties(prefix = "spring.batch.datasource")
-    @Data
-    private class BatchDataSource {
-        private String url;
-        private String driverClassName;
-        private String username;
-        private String password;
+    @BatchDataSource
+    @Bean(name = "batchDataSource", destroyMethod = "close")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+                .url(environment.getProperty("spring.batch.datasource.url"))
+                .driverClassName(environment.getProperty("spring.batch.datasource.driverClassName"))
+                .username(environment.getProperty("spring.batch.datasource.username"))
+                .password(environment.getProperty("spring.batch.datasource.password"))
+                .build();
     }
 
 }
