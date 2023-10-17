@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
-import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -17,7 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class Job001Config {
 
     private final JobRepository jobRepository;
-    private final PlatformTransactionManager txManager;
+    private final PlatformTransactionManager transactionManager;
     private final TestTasklet testTasklet;
 
     @Bean
@@ -27,15 +26,15 @@ public class Job001Config {
                 .tasklet((contribution, chunkContext) -> {
                     System.out.println("sample job step");
                     return RepeatStatus.FINISHED;
-                }, txManager)
+                }, transactionManager)
                 .build();
 
         Step step2 = new StepBuilder("step2", jobRepository)
-                .tasklet(testTasklet, txManager)
+                .tasklet(testTasklet, transactionManager)
                 .build();
 
         return new JobBuilder("job001", jobRepository)
-                .incrementer(new RunIdIncrementer()) // 同じパラメーアの再実行を許可する
+                // .incrementer(new RunIdIncrementer()) // 同じパラメータでの再実行を許可する、H2の場合は不要
                 .start(step1)
                 .next(step2)
                 .build();

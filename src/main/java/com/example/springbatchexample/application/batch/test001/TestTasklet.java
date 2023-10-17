@@ -13,11 +13,11 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.TransactionManager;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
 
 @StepScope
 @Component
@@ -33,10 +33,6 @@ public class TestTasklet implements Tasklet {
 
     @Autowired
     TransactionManager transactionManager;
-
-//    @Autowired
-//    @Qualifier("batchTransactionManager")
-//    TransactionManager batchTransactionManager;
 
     @Autowired
     DefaultListableBeanFactory beanFactory;
@@ -56,13 +52,16 @@ public class TestTasklet implements Tasklet {
     @Autowired
     JobOperator jobOperator;
 
+    @Autowired
+    ApplicationContext applicationContext;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         System.out.println("TestTasklet");
 
-        var list = beanFactory.getBeanDefinitionNames();
-        Arrays.stream(list).toList().forEach(System.out::println);
+        // ApplicationContextに登録済みBeanの一覧を表示する
+        // var list = beanFactory.getBeanDefinitionNames();
+        // Arrays.stream(list).toList().forEach(System.out::println);
 
         return RepeatStatus.FINISHED;
     }
