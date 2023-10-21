@@ -1,5 +1,8 @@
 package com.example.springbatchexample.application.batch.test001;
+import java.time.LocalDateTime;
 
+import com.example.springbatchexample.application.mapper.EmployeeMapper;
+import com.example.springbatchexample.domain.model.Employee;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -58,10 +61,6 @@ public class TestTasklet implements Tasklet {
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         System.out.println("TestTasklet");
-
-        // ApplicationContextに登録済みBeanの一覧を表示する
-        // var list = beanFactory.getBeanDefinitionNames();
-        // Arrays.stream(list).toList().forEach(System.out::println);
 
         return RepeatStatus.FINISHED;
     }

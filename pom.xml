@@ -60,6 +60,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.oracle.database.jdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -76,6 +82,31 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.mybatis.generator</groupId>
+				<artifactId>mybatis-generator-maven-plugin</artifactId>
+				<version>1.4.2</version>
+				<dependencies>
+					<!-- オリジナルのカスタムプラグイン -->
+					<dependency>
+						<groupId>com.example</groupId>
+						<artifactId>mbg-plugins</artifactId>
+						<version>1.0</version>
+						<scope>system</scope>
+						<systemPath>${basedir}/src/main/resources/lib/mbg-plugins-1.0.20231021.jar</systemPath>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<!-- デフォルトのコンフィグファイルを変更したい場合に修正
+                    <configurationFile>${project.basedir}/src/main/resources/generatorConfig.xml</configurationFile>
+                    -->
+					<overwrite>true</overwrite>
+					<!-- 全てのクラスを依存関係に追加する -->
+					<includeAllDependencies>true</includeAllDependencies>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
