@@ -1,8 +1,5 @@
 package com.example.springbatchexample.application.batch.test001;
-import java.time.LocalDateTime;
 
-import com.example.springbatchexample.application.mapper.EmployeeMapper;
-import com.example.springbatchexample.domain.model.Employee;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.StepScope;
