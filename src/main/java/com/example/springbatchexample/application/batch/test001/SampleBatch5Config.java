@@ -21,25 +21,20 @@ public class SampleBatch5Config {
     private final PlatformTransactionManager txManager;
     private final TestTasklet testTasklet;
 
-    @Bean
-    Step step1() {
-        return new StepBuilder("step1", jobRepository)
+    @Bean(JOB_ID)
+    Job job() {
+
+        Step step1 = new StepBuilder("step1", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
                     System.out.println("sample job step");
                     return RepeatStatus.FINISHED;
                 }, txManager)
                 .build();
-    }
 
-    @Bean
-    Step step2() {
-        return new StepBuilder("step2", jobRepository)
+        Step step2 =  new StepBuilder("step2", jobRepository)
                 .tasklet(testTasklet, txManager)
                 .build();
-    }
 
-    @Bean(JOB_ID)
-    Job job(Step step1, Step step2) {
         return new JobBuilder(JOB_ID, jobRepository)
                 // .incrementer(new RunIdIncrementer())
                 .start(step1)
