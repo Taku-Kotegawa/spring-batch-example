@@ -1,5 +1,6 @@
-package com.example.springbatchexample.application.batch.test001;
+package com.example.springbatchexample.application.batch.test002;
 
+import com.example.springbatchexample.application.batch.test001.TestTasklet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

@@ -1,4 +1,4 @@
-package com.example.springbatchexample.application.batch.test001;
+package com.example.springbatchexample.application.batch.test002;
 
 import com.example.springbatchexample.application.mapper.EmployeeMapper;
 import com.example.springbatchexample.domain.model.Employee;

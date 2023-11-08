@@ -1,4 +1,4 @@
-package com.example.springbatchexample.application.batch.test001;
+package com.example.springbatchexample.application.batch.test003;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
@@ -13,40 +13,30 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @RequiredArgsConstructor
-public class SampleBatch5Config {
+public class NoStepScopeConfig {
 
-    private final static String JOB_ID = "sampleJob";
+    private final static String JOB_ID = "noStepScope";
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager txManager;
-    private final TestTasklet testTasklet;
-
-    @Bean
-    Step step1() {
-        return new StepBuilder("step1", jobRepository)
-                .tasklet((contribution, chunkContext) -> {
-                    System.out.println("sample job step");
-                    return RepeatStatus.FINISHED;
-                }, txManager)
-                .build();
-    }
-
-    @Bean
-    Step step2() {
-        return new StepBuilder("step2", jobRepository)
-                .tasklet(testTasklet, txManager)
-                .build();
-    }
+    private final NoStepScopeTasklet noStepScopeTasklet;
 
     @Bean(JOB_ID)
-    Job job(Step step1, Step step2) {
+    Job job() {
+
+        Step step1 = new StepBuilder("step2", jobRepository)
+                .tasklet(noStepScopeTasklet, txManager)
+                .build();
+
         return new JobBuilder(JOB_ID, jobRepository)
                 // .incrementer(new RunIdIncrementer())
                 .start(step1)
-                .next(step2)
-                .next(step2)
-                .next(step2)
-                .next(step2)
+                .next(step1)
+                .next(step1)
+                .next(step1)
+                .next(step1)
+                .next(step1)
+                .next(step1)
                 .build();
     }
 
