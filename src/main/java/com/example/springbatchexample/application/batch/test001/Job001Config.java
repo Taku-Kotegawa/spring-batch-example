@@ -15,11 +15,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 public class Job001Config {
 
+    private final static String JOB_ID = "job001";
+
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
     private final TestTasklet testTasklet;
+    private final DBAccessTasklet dbAccessTasklet;
 
-    @Bean
+    @Bean(JOB_ID)
     Job job() {
 
         Step step1 = new StepBuilder("step1", jobRepository)
@@ -33,10 +36,20 @@ public class Job001Config {
                 .tasklet(testTasklet, transactionManager)
                 .build();
 
-        return new JobBuilder("job001", jobRepository)
+        Step step3 = new StepBuilder("step3", jobRepository)
+                .tasklet(testTasklet, transactionManager)
+                .build();
+
+        Step step4 = new StepBuilder("step4", jobRepository)
+                .tasklet(dbAccessTasklet, transactionManager)
+                .build();
+
+        return new JobBuilder(JOB_ID, jobRepository)
                 // .incrementer(new RunIdIncrementer()) // 同じパラメータでの再実行を許可する、H2の場合は不要
                 .start(step1)
                 .next(step2)
+                .next(step3)
+                .next(step4)
                 .build();
     }
 

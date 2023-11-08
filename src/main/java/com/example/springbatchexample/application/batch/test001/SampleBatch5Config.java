@@ -15,6 +15,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 @RequiredArgsConstructor
 public class SampleBatch5Config {
 
+    private final static String JOB_ID = "sampleJob";
+
     private final JobRepository jobRepository;
     private final PlatformTransactionManager txManager;
     private final TestTasklet testTasklet;
@@ -36,9 +38,9 @@ public class SampleBatch5Config {
                 .build();
     }
 
-    @Bean
-    Job sampleJob(Step step1, Step step2) {
-        return new JobBuilder("sampleJob", jobRepository)
+    @Bean(JOB_ID)
+    Job job(Step step1, Step step2) {
+        return new JobBuilder(JOB_ID, jobRepository)
                 // .incrementer(new RunIdIncrementer())
                 .start(step1)
                 .next(step2)
